@@ -121,6 +121,28 @@ class UserInformation extends StatefulWidget {
 
 CollectionReference nomes = FirebaseFirestore.instance.collection('nomes');
 
+final myController = TextEditingController();
+final _formKey = GlobalKey<FormState>();
+
+Future<void> adicionarNome(String nome) {
+  return nomes
+      .add({'nome': nome})
+      .then((value) => print("Nome adicionado"))
+      .catchError((error) => print("Erro ao adicionar: $error"));
+}
+
+Future<void> getNames() async {
+  FirebaseFirestore.instance
+      .collection('nomes')
+      .get()
+      .then((QuerySnapshot querySnapshot) {
+    querySnapshot.docs.forEach((doc) {
+      print("DOCS NAME:" + doc["nome"]);
+      print("DOC ID:" + doc.id);
+    });
+  });
+}
+
 Future<void> deleteUser(String docId) {
   return nomes
       .doc(docId)
@@ -162,7 +184,7 @@ class _UserInformationState extends State<UserInformation> {
                   print("DATA:" + document.id);
                   deleteUser(document.id);
                 },
-                child: Text('remover usuario: '),
+                child: Text('X'),
               ),
             );
           }).toList(),
