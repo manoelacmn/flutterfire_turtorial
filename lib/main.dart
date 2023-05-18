@@ -119,6 +119,16 @@ class UserInformation extends StatefulWidget {
   _UserInformationState createState() => _UserInformationState();
 }
 
+CollectionReference nomes = FirebaseFirestore.instance.collection('nomes');
+
+Future<void> deleteUser(String docId) {
+  return nomes
+      .doc(docId)
+      .delete()
+      .then((value) => print("User Deleted"))
+      .catchError((error) => print("Failed to delete user: $error"));
+}
+
 class _UserInformationState extends State<UserInformation> {
   final Stream<QuerySnapshot> _usersStream =
       FirebaseFirestore.instance.collection('nomes').snapshots();
@@ -143,7 +153,17 @@ class _UserInformationState extends State<UserInformation> {
 
             return ListTile(
               title: Text(data["nome"]),
-              trailing: const Icon(Icons.add),
+              trailing: TextButton(
+                style: ButtonStyle(
+                  foregroundColor:
+                      MaterialStateProperty.all<Color>(Colors.blue),
+                ),
+                onPressed: () {
+                  print("DATA:" + document.id);
+                  deleteUser(document.id);
+                },
+                child: Text('remover usuario: '),
+              ),
             );
           }).toList(),
         );
