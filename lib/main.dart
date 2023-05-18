@@ -48,6 +48,8 @@ class MyCustomFormState extends State<MyCustomForm> {
   final myController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
+  final Stream<QuerySnapshot> _usersStream =
+      FirebaseFirestore.instance.collection('nomes').snapshots();
   // Cria uma referência para a colecao nomes no firestore.
   CollectionReference nomes = FirebaseFirestore.instance.collection('nomes');
 
@@ -138,9 +140,10 @@ class _UserInformationState extends State<UserInformation> {
           children: snapshot.data!.docs.map((DocumentSnapshot document) {
             Map<String, dynamic> data =
                 document.data()! as Map<String, dynamic>;
+
             return ListTile(
               title: Text(data["nome"]),
-              subtitle: Text(data['nome']),
+              trailing: const Icon(Icons.add),
             );
           }).toList(),
         );
