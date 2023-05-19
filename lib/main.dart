@@ -25,11 +25,12 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: appTitle,
       home: Scaffold(
-        appBar: AppBar(
-          title: const Text(appTitle),
-        ),
-        body: UserInformation(),
-      ),
+          appBar: AppBar(
+            title: const Text(appTitle),
+          ),
+          body: Column(children: [UserInformation()])
+          // Column()
+          ),
     );
   }
 }
@@ -121,6 +122,8 @@ class UserInformation extends StatefulWidget {
 
 CollectionReference nomes = FirebaseFirestore.instance.collection('nomes');
 
+MyCustomForm a = new MyCustomForm();
+
 final myController = TextEditingController();
 final _formKey = GlobalKey<FormState>();
 
@@ -172,7 +175,6 @@ class _UserInformationState extends State<UserInformation> {
           children: snapshot.data!.docs.map((DocumentSnapshot document) {
             Map<String, dynamic> data =
                 document.data()! as Map<String, dynamic>;
-
             return ListTile(
               title: Text(data["nome"]),
               trailing: TextButton(
